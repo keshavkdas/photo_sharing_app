@@ -10,14 +10,48 @@ require 'vendor/autoload.php';
 
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
+use Aws\SecretsManager\SecretsManagerClient;
 
 $bucketName = 'keshavshare';
+function getAWSCredentials()
+{
+    $secretName = "s3bucket-cred"; // Replace with your secret name in AWS Secr>
+    $region = "ap-south-1"; // Replace with your preferred AWS region
+
+    // Create a Secrets Manager client with default credentials
+    $secretsManagerClient = new SecretsManagerClient([
+        'version' => 'latest',
+        'region' => $region,
+    ]);
+
+    try {
+        // Retrieve secret value from Secrets Manager
+        $result = $secretsManagerClient->getSecretValue([
+            'SecretId' => $secretName,
+        ]);
+
+        // Parse and extract the secret values
+        $secret = json_decode($result['SecretString'], true);
+        return [
+            'key' => $secret['AccessKeyId'],
+            'secret' => $secret['SecretAccessKey'],
+        ];
+
+    } catch (AwsException $e) {
+        // Output error message
+        error_log('Error retrieving AWS credentials from Secrets Manager: ' . $>
+        return null;
+    }
+}
+
+// Initialize S3 client with retrieved credentials
+$credentials = getAWSCredentials();
 
 // Initialize S3 client
 $s3 = new S3Client([
     'credentials' => [
-        'key' => $IAM_KEY,
-        'secret' => $IAM_SECRET,
+        'key'    => $credentials['key'],
+        'secret' => $credentials['secret'],
     ],
     'version' => 'latest',
     'region' => 'ap-south-1',
