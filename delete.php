@@ -1,5 +1,6 @@
 <?php
 require 'vendor/autoload.php';
+session_start();
 
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
