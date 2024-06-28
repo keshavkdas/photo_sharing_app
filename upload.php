@@ -1,10 +1,17 @@
 <?php
 session_start();
 
-require 'vendor/autoload.php'; // Include AWS SDK for PHP
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+require '/var/www/html/photo-sharing-app/vendor/autoload.php';
+
 
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
+use Aws\Credentials\Credentials;
 use Aws\SecretsManager\SecretsManagerClient;
 
 $bucketName = 'keshavshare';
@@ -44,8 +51,7 @@ function getAWSCredentials()
 // Initialize S3 client with retrieved credentials
 $credentials = getAWSCredentials();
 
-
-$conn = new mysqli("localhost", "root", "", "share");
+$conn = new mysqli("localhost", "root", "Keshav@123", "photo_sharing_app");
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -80,6 +86,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
 
         $objectUrl = $s3->getObjectUrl($bucketName, $fileKey);
 
+        // Dynamic table name based on username
+        $userTableName = "user_$username";
         // Insert file details into database
         $insertQuery = "INSERT INTO user_files (username, file_name, file_url) VALUES ('$username', '$fileName', '$objectUrl')";
         if ($conn->query($insertQuery) === TRUE) {
