@@ -8,10 +8,8 @@ if (!isset($_SESSION['username'])) {
 
 require '/var/www/html/photo-sharing-app/vendor/autoload.php';
 
-
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
-use Aws\Credentials\Credentials;
 use Aws\SecretsManager\SecretsManagerClient;
 
 $bucketName = 'keshavshare';
@@ -19,7 +17,7 @@ $region = 'ap-south-1';
 
 function getAWSCredentials()
 {
-    $secretName = "s3bucket-cred"; // Replace with your secret name in AWS Secr>
+    $secretName = "s3bucket-cred"; // Replace with your secret name in AWS Secrets Manager
     $region = "ap-south-1"; // Replace with your preferred AWS region
 
     // Create a Secrets Manager client with default credentials
@@ -42,8 +40,8 @@ function getAWSCredentials()
         ];
 
     } catch (AwsException $e) {
-        // Output error message
-        error_log('Error retrieving AWS credentials from Secrets Manager: ' . $>
+        // Output error message to error log
+        error_log('Error retrieving AWS credentials from Secrets Manager: ' . $e->getMessage());
         return null;
     }
 }
@@ -61,7 +59,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
     $fileName = $_FILES['file']['name'];
     $fileTmpName = $_FILES['file']['tmp_name'];
-    
+
+    // Validate and sanitize user inputs if necessary
+    $fileName = htmlspecialchars($fileName);
+
     // Create S3 client
     $s3 = new S3Client([
         'credentials' => [
@@ -76,27 +77,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
         // Create folder in S3 bucket with user's username
         $folderName = "user_$username/";
         $fileKey = $folderName . $fileName;
-        
+
         // Upload file to S3 bucket
         $result = $s3->putObject([
             'Bucket' => $bucketName,
             'Key' => $fileKey,
-            'Body' => fopen($fileTmpName, 'rb')
+            'Body' => fopen($fileTmpName, 'rb'),
         ]);
 
-        $objectUrl = $s3->getObjectUrl($bucketName, $fileKey);
+        $objectUrl = $result['ObjectURL'];
 
         // Dynamic table name based on username
-        $userTableName = "user_$username";
-        // Insert file details into database
-        $insertQuery = "INSERT INTO user_files (username, file_name, file_url) VALUES ('$username', '$fileName', '$objectUrl')";
-        if ($conn->query($insertQuery) === TRUE) {
+        $userTableName = "user_files";
+
+        // Use prepared statement to insert file details into database
+        $insertQuery = $conn->prepare("INSERT INTO $userTableName (username, file_name, file_url) VALUES (?, ?, ?)");
+        $insertQuery->bind_param("sss", $username, $fileName, $objectUrl);
+
+        if ($insertQuery->execute()) {
             echo "File uploaded successfully.";
             header("Location: listfiles.html");
             exit();
         } else {
             echo "Error inserting file: " . $conn->error;
         }
+
+        $insertQuery->close();
     } catch (AwsException $e) {
         echo "Error uploading file to S3: " . $e->getMessage();
     }
