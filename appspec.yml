@@ -7,3 +7,4 @@ hooks:
   AfterInstall:
     - location: scripts/install_dependencies.sh
       runas: ec2-user
+
