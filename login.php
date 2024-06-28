@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Fetched Password Hash: " . $row['password'] . "<br>";
 
         // Verify password
-        if (password_verify($pass, $row['password'])) {
+        if (($pass==$row['password'])) {
             // Password is correct, set session variables
             $_SESSION['id'] = $row['id'];
             $_SESSION['username'] = $row['username'];
