@@ -1,9 +1,0 @@
-version: 0.0
-os: linux
-files:
-  - source: /
-    destination: /var/www/html
-hooks:
-  AfterInstall:
-    - location: scripts/install_dependencies.sh
-      runas: ec2-user
