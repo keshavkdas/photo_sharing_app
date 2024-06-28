@@ -3,8 +3,8 @@ session_start();
 
 $servername = "localhost";
 $username = "root"; // Database username
-$password = ""; // Database password
-$dbname = "share"; // Database name
+$password = "Keshav@123"; // Database password
+$dbname = "photo_sharing_app"; // Database name
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -43,7 +43,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Password is correct, set session variables
             $_SESSION['id'] = $row['id'];
             $_SESSION['username'] = $row['username'];
-            $_SESSION['image_links'] = $row['image_links'];
             $_SESSION['loggedIn'] = 'true';
             print_r($_SESSION['loggedIn']);
             // Redirect to the upload page or any other page after successful login
