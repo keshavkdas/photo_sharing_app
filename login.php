@@ -6,46 +6,46 @@ $username = "root"; // Database username
 $password = "Keshav@123"; // Database password
 $dbname = "photo_sharing_app"; // Database name
 
+// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
-} else {
-    // Debugging
-    echo "Database connected successfully<br>";
 }
 
+// Debugging - Connection successful
+echo "Database connected successfully<br>";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $user = $_POST['username'];
-    $pass = $_POST['password'];
+    // Sanitize user input
+    $user = htmlspecialchars($_POST['username']);
+    $pass = htmlspecialchars($_POST['password']);
 
-    // Validate user input
-    $user = htmlspecialchars($user);
-    $pass = htmlspecialchars($pass);
-
-    // Debugging
-    echo "Username: " . $user . "<br>";
-    echo "Password: " . $pass . "<br>";
-
-    // Prepare and bind
-    $stmt = $conn->prepare("SELECT id, username, password, image_links FROM users WHERE username = ?");
+    // Prepare and bind SQL statement
+    $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE username = ?");
     $stmt->bind_param("s", $user);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        // Debugging
+        
+        // Debugging - Fetched data
         echo "Fetched Username: " . $row['username'] . "<br>";
         echo "Fetched Password Hash: " . $row['password'] . "<br>";
 
-        if (($pass==$row['password'])) {
+        // Verify password
+        if (password_verify($pass, $row['password'])) {
             // Password is correct, set session variables
             $_SESSION['id'] = $row['id'];
             $_SESSION['username'] = $row['username'];
-            $_SESSION['loggedIn'] = 'true';
-            print_r($_SESSION['loggedIn']);
-            // Redirect to the upload page or any other page after successful login
+            $_SESSION['loggedIn'] = true; // Use boolean true for session variable
+
+            // Debugging - Session variable
+            echo "Logged in: " . $_SESSION['loggedIn'] . "<br>";
+
+            // Redirect to the upload page after successful login
             header("Location: upload.html");
             exit();
         } else {
@@ -57,8 +57,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Invalid username or password.";
     }
 
-    // Close the statement and connection
+    // Close statement
     $stmt->close();
-    $conn->close();
 }
+
+// Close connection
+$conn->close();
 ?>
