@@ -41,6 +41,14 @@ input[type="password"] {
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
+    background-color: #f8f9fa; /* Light gray background */
+    transition: border-color 0.3s ease-in-out;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #007BFF; /* Blue border on focus */
 }
 
 button {
@@ -50,6 +58,7 @@ button {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
 }
 
 button:hover {
@@ -59,6 +68,7 @@ button:hover {
 .links {
     display: flex;
     justify-content: space-around;
+    margin-top: 10px;
 }
 
 .links a {
@@ -67,9 +77,25 @@ button:hover {
     padding: 10px;
     border: 1px solid #007BFF;
     border-radius: 4px;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .links a:hover {
     background-color: #007BFF;
     color: #fff;
+}
+
+/* Background and Image Styling */
+body {
+    background-image: url('https://example.com/background-image.jpg'); /* Replace with your image URL */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    backdrop-filter: blur(5px); /* Blur effect for modern browsers */
+    border: 1px solid #ccc; /* Light border */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Soft shadow */
 }
