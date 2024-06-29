@@ -6,26 +6,32 @@ $username = "root";
 $password = "Keshav@123";
 $dbname = "photo_sharing_app";
 
+// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    // Sanitize user input
+    $username = htmlspecialchars($_POST['username']);
+    $password = htmlspecialchars($_POST['password']);
 
     // Check if username already exists
-    $checkQuery = "SELECT * FROM users WHERE username = '$username'";
-    $checkResult = $conn->query($checkQuery);
+    $checkQuery = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    $checkQuery->bind_param("s", $username);
+    $checkQuery->execute();
+    $checkResult = $checkQuery->get_result();
+
     if ($checkResult->num_rows > 0) {
-         echo "<script>alert('Username already exists.'); window.location.href='register.html';</script>";
+        echo "<script>alert('Username already exists.'); window.location.href='register.html';</script>";
     } else {
-        // Insert user into 'users' table
-        // Insert user into 'users' table
+        // Insert user into 'users' table with password hashing
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $insertQuery = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-        $insertQuery->bind_param("ss", $username, $password);
+        $insertQuery->bind_param("ss", $username, $hashedPassword);
 
         if ($insertQuery->execute() === TRUE) {
             // Create a table for the user to store files
@@ -34,8 +40,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 file_name VARCHAR(255) NOT NULL,
                 file_url VARCHAR(255) NOT NULL
             )";
-            if ($createTableQuery->execute() === TRUE) {
-                 echo "<script>alert('Registration successful.'); window.location.href='login.html';</script>";
+            if ($conn->query($createTableQuery) === TRUE) {
+                echo "<script>alert('Registration successful.'); window.location.href='login.html';</script>";
             } else {
                 echo "Error creating user table: " . $conn->error;
             }
@@ -46,7 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $checkQuery->close();
     $insertQuery->close();
-    $createTableQuery->close();
 } else {
     echo "Invalid request method.";
 }
