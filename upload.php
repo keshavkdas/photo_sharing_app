@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
         $insertQuery = "INSERT INTO $userTableName ( file_name, file_url) VALUES ( '$fileName', '$objectUrl')";
         if ($conn->query($insertQuery) === TRUE) {
             echo "File uploaded successfully.";
-            header("Location: lsitfiles.html");
+            header("Location: listfiles.html");
             exit();
         } else {
             echo "Error inserting file: " . $conn->error;
