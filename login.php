@@ -33,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Password is correct, set session variables
             $_SESSION['id'] = $row['id'];
             $_SESSION['username'] = $row['username'];
+            $_SESSION['username'] = true;
             $_SESSION['loggedIn'] = true; // Use boolean true for session variable
 
             // Redirect to the upload page after successful login
