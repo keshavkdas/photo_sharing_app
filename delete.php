@@ -8,7 +8,7 @@ use Aws\SecretsManager\SecretsManagerClient;
 
 function getAWSCredentials()
 {
-    $secretName = "s3bucket-cred"; // Replace with your secret name in AWS Secr>
+    $secretName = "s3bucket-cred"; // Replace with your secret name in AWS Secrets Manager
     $region = "ap-south-1"; // Replace with your preferred AWS region
 
     // Create a Secrets Manager client with default credentials
@@ -31,8 +31,8 @@ function getAWSCredentials()
         ];
 
     } catch (AwsException $e) {
-        // Output error message
-        error_log('Error retrieving AWS credentials from Secrets Manager: ' . $>
+        // Output error message to error log
+        error_log('Error retrieving AWS credentials from Secrets Manager: ' . $e->getMessage());
         return null;
     }
 }
@@ -42,18 +42,23 @@ $credentials = getAWSCredentials();
 
 header('Content-Type: application/json');
 
+if ($credentials === null) {
+    echo json_encode(['message' => 'Error retrieving AWS credentials.']);
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
     if (isset($data['fileName'])) {
         $bucketName = 'keshavshare';
         if (isset($_SESSION['username'])) {
-                $username = $_SESSION['username'];
+            $username = $_SESSION['username'];
         } else {
-                throw new Exception("User is not logged in.");
+            echo json_encode(['message' => 'User is not logged in.']);
+            exit();
         }
         $keyName = "user_$username/" . $data['fileName'];
- 
 
         $s3 = new S3Client([
             'version' => 'latest',
@@ -62,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'key' => $credentials['key'],
                 'secret' => $credentials['secret'],
             ],
-
         ]);
 
         try {
@@ -73,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             echo json_encode(['message' => 'File deleted successfully']);
         } catch (AwsException $e) {
+            error_log('Error deleting file: ' . $e->getMessage());
             echo json_encode(['message' => 'Error deleting file: ' . $e->getMessage()]);
         }
     } else {
