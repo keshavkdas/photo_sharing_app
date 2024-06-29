@@ -127,9 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo "No file uploaded or user not logged in.";
     }
-} else {
-    echo "Invalid request method.";
-}
+} 
 
 $conn->close();
 ?>
