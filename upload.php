@@ -6,7 +6,7 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-require '/var/www/html/photo-sharing-app/vendor/autoload.php';
+require '/var/www/html/photo_sharing_app/vendor/autoload.php';
 
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
@@ -88,21 +88,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
         $objectUrl = $result['ObjectURL'];
 
         // Dynamic table name based on username
-        $userTableName = "user_files";
+        $userTableName = "user_$username";
 
         // Use prepared statement to insert file details into database
-        $insertQuery = $conn->prepare("INSERT INTO $userTableName (username, file_name, file_url) VALUES (?, ?, ?)");
-        $insertQuery->bind_param("sss", $username, $fileName, $objectUrl);
+        $insertQuery = "INSERT INTO $userTableName ( file_name, file_url) VALUES ( '$fileName', '$objectUrl')";
 
-        if ($insertQuery->execute()) {
+        if ($conn->query($insertQuery) === TRUE) {
             echo "File uploaded successfully.";
             header("Location: listfiles.html");
             exit();
         } else {
             echo "Error inserting file: " . $conn->error;
         }
-
-        $insertQuery->close();
     } catch (AwsException $e) {
         echo "Error uploading file to S3: " . $e->getMessage();
     }
