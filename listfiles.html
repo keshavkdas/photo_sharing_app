@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List Files</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,6 +59,7 @@
 <body>
     <h2>List Files</h2>
     <ul id="file-list">
+        <!-- File list items will be dynamically added here -->
     </ul>
 
     <button class="logout-btn" onclick="logout()">Logout</button>
@@ -67,6 +69,10 @@
         function logout() {
             fetch('logout.php', {
                 method: 'POST',
+                credentials: 'same-origin', // Send cookies (session ID)
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             })
             .then(response => {
                 if (!response.ok) {
@@ -84,24 +90,37 @@
             });
         }
     
-        fetch('checksession.php')
-        .then(response => response.json())
-        .then(data => {
-            if (!data.loggedIn) {
-                alert('Session logged out. Please login again.');
-                location.href = 'login.html'; // Redirect to login page if session is not active
-            } else {
-                // Fetch and display files if session is active
-                fetchFiles();
-            }
-        })
-        .catch(error => {
-            console.error('Error checking session:', error);
-            alert('Error checking session');
-        });
+        function checkSession() {
+            fetch('checksession.php', {
+                method: 'GET',
+                credentials: 'same-origin', // Send cookies (session ID)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data.loggedIn) {
+                    alert('Session logged out. Please login again.');
+                    location.href = 'login.html'; // Redirect to login page if session is not active
+                } else {
+                    // Fetch and display files if session is active
+                    fetchFiles();
+                }
+            })
+            .catch(error => {
+                console.error('Error checking session:', error);
+                alert('Error checking session');
+            });
+        }
 
-         function fetchFiles() {
-            fetch('listfiles.php')
+        function fetchFiles() {
+            fetch('listfiles.php', {
+                method: 'GET',
+                credentials: 'same-origin', // Send cookies (session ID)
+            })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -120,7 +139,7 @@
                     listItem.appendChild(image);
 
                     const downloadLink = document.createElement('a');
-                    downloadLink.href = file.presignedUrl; // Use the pre-signed URL for dow>
+                    downloadLink.href = file.presignedUrl; // Use the pre-signed URL for download link
                     downloadLink.download = file.name;
                     downloadLink.textContent = 'Download';
                     downloadLink.className = 'download-link';
@@ -147,6 +166,7 @@
             if (confirm('Are you sure you want to delete this file?')) {
                 fetch('delete.php', {
                     method: 'POST',
+                    credentials: 'same-origin', // Send cookies (session ID)
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -160,7 +180,7 @@
                 })
                 .then(data => {
                     alert(data.message);
-                    location.reload();
+                    fetchFiles(); // Refresh the file list after deletion
                 })
                 .catch(error => {
                     console.error('Error deleting file:', error);
@@ -168,6 +188,9 @@
                 });
             }
         }
+
+        // Check session status on page load
+        checkSession();
     </script>
 </body>
 </html>
