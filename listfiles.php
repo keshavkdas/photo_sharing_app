@@ -39,7 +39,7 @@ function getAWSCredentials()
         ];
 
     } catch (AwsException $e) {
-        // Output error message to error log
+        // Output error message
         error_log('Error retrieving AWS credentials from Secrets Manager: ' . $e->getMessage());
         return null;
     }
@@ -48,19 +48,11 @@ function getAWSCredentials()
 // Initialize S3 client with retrieved credentials
 $credentials = getAWSCredentials();
 
-if ($credentials === null) {
-    // Handle the error case where credentials are not retrieved
-    error_log('Error: AWS credentials not retrieved.');
-    header('HTTP/1.1 500 Internal Server Error');
-    echo json_encode(['error' => 'Error retrieving AWS credentials.']);
-    exit();
-}
-
 // Initialize S3 client
 $s3 = new S3Client([
     'credentials' => [
-        'key'    => $credentials['key'],
-        'secret' => $credentials['secret'],
+        'key' => $credentials['key'],
+        'secret' =>$credentials['secret'],
     ],
     'version' => 'latest',
     'region' => 'ap-south-1',
@@ -85,7 +77,7 @@ try {
                     'Bucket' => $bucketName,
                     'Key' => $fileKey,
                 ]),
-                '+15 minutes' // Expiration time for the pre-signed URL (e.g., 15 minutes)
+                '+15 minutes'
             )->getUri();
 
             $files[] = [
