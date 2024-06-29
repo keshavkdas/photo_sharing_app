@@ -13,9 +13,10 @@ use Aws\Exception\AwsException;
 use Aws\SecretsManager\SecretsManagerClient;
 
 $bucketName = 'keshavshare';
+
 function getAWSCredentials()
 {
-    $secretName = "s3bucket-cred"; // Replace with your secret name in AWS Secr>
+    $secretName = "s3bucket-cred"; // Replace with your secret name in AWS Secrets Manager
     $region = "ap-south-1"; // Replace with your preferred AWS region
 
     // Create a Secrets Manager client with default credentials
@@ -38,14 +39,22 @@ function getAWSCredentials()
         ];
 
     } catch (AwsException $e) {
-        // Output error message
-        error_log('Error retrieving AWS credentials from Secrets Manager: ' . $>
+        // Output error message to error log
+        error_log('Error retrieving AWS credentials from Secrets Manager: ' . $e->getMessage());
         return null;
     }
 }
 
 // Initialize S3 client with retrieved credentials
 $credentials = getAWSCredentials();
+
+if ($credentials === null) {
+    // Handle the error case where credentials are not retrieved
+    error_log('Error: AWS credentials not retrieved.');
+    header('HTTP/1.1 500 Internal Server Error');
+    echo json_encode(['error' => 'Error retrieving AWS credentials.']);
+    exit();
+}
 
 // Initialize S3 client
 $s3 = new S3Client([
