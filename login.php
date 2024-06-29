@@ -14,9 +14,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Debugging - Connection successful
-echo "Database connected successfully<br>";
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize user input
     $user = htmlspecialchars($_POST['username']);
@@ -31,10 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         
-        // Debugging - Fetched data
-        echo "Fetched Username: " . $row['username'] . "<br>";
-        echo "Fetched Password Hash: " . $row['password'] . "<br>";
-
         // Verify password
         if (($pass==$row['password'])) {
             // Password is correct, set session variables
@@ -42,11 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['username'] = $row['username'];
             $_SESSION['loggedIn'] = true; // Use boolean true for session variable
 
-            // Debugging - Session variable
-            echo "Logged in: " . $_SESSION['loggedIn'] . "<br>";
-
             // Redirect to the upload page after successful login
-            header("Location: upload.html");
+            header("Location: upload.php");
             exit();
         } else {
             // Invalid password
