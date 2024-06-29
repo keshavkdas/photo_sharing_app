@@ -15,9 +15,12 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Sanitize user input
-    $username = htmlspecialchars($_POST['username']);
-    $password = htmlspecialchars($_POST['password']);
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Validate and sanitize user input
+    $username = htmlspecialchars($username);
+    $password = htmlspecialchars($password);
 
     // Check if username already exists
     $checkQuery = $conn->prepare("SELECT * FROM users WHERE username = ?");
@@ -28,19 +31,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($checkResult->num_rows > 0) {
         echo "<script>alert('Username already exists.'); window.location.href='register.html';</script>";
     } else {
-        // Insert user into 'users' table with password hashing
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        // Insert user into 'users' table
         $insertQuery = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-        $insertQuery->bind_param("ss", $username, $hashedPassword);
-
+        $insertQuery->bind_param("ss", $username, $password);
         if ($insertQuery->execute() === TRUE) {
             // Create a table for the user to store files
-            $createTableQuery = "CREATE TABLE IF NOT EXISTS user_$username (
+            $createTableQuery = $conn->prepare("CREATE TABLE IF NOT EXISTS user_$username (
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 file_name VARCHAR(255) NOT NULL,
                 file_url VARCHAR(255) NOT NULL
-            )";
-            if ($conn->query($createTableQuery) === TRUE) {
+            )");
+
+            if ($createTableQuery->execute() === TRUE) {
                 echo "<script>alert('Registration successful.'); window.location.href='login.html';</script>";
             } else {
                 echo "Error creating user table: " . $conn->error;
@@ -52,6 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $checkQuery->close();
     $insertQuery->close();
+    $createTableQuery->close();
 } else {
     echo "Invalid request method.";
 }
