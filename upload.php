@@ -6,7 +6,7 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-require '/var/www/html/photo_sharing_app/vendor/autoload.php';
+require '/var/www/html/vendor/autoload.php';
 
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
