@@ -37,12 +37,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         } else {
             $_SESSION['error'] = "Invalid username or password.";
-            header("Location: login.php");
+            header("Location: login.html");
             exit();
         }
     } else {
         $_SESSION['error'] = "Invalid username or password.";
-        header("Location: login.php");
+        header("Location: login.html");
         exit();
     }
 
