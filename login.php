@@ -6,6 +6,10 @@ $username = "root"; // Database username
 $password = "Keshav@123"; // Database password
 $dbname = "photo_sharing_app"; // Database name
 
+$originalUrl = 'http://65.0.125.78/login.html';
+$encodedUrl = urlencode($originalUrl);
+echo $encodedUrl;
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
@@ -60,5 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Close the statement and connection
     $stmt->close();
     $conn->close();
+
 }
 ?>
