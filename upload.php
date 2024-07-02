@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
     $fileType = mime_content_type($fileTmpName);
 
     // Allowed file types
-    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
+    $allowedTypes = ['image/jpeg', 'image/gif', 'application/pdf'];
 
     // Validate file type
     if (!in_array($fileType, $allowedTypes)) {
