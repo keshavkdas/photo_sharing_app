@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-//header("Content-Security-Policy: default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;");
 
 $servername = "localhost";
 $username = "root";
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($checkResult->num_rows > 0) {
         // Username already exists
-        echo "<script>alert('Username already exists.'); window.location.href='register.html';</script>";
+       echo "<script src='redirect.js'></script>";
         exit(); // Stop further execution
     } else {
         // Insert user into 'users' table
