@@ -62,11 +62,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
     $fileType = mime_content_type($fileTmpName);
 
     // Allowed file types
-    $allowedTypes = ['image/jpeg', 'image/gif', 'application/pdf'];
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
 
     // Validate file type
     if (!in_array($fileType, $allowedTypes)) {
-        echo "Invalid file type.";
+        echo "Invalid file type: $fileType";
         exit();
     }
 
@@ -92,7 +92,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
         $result = $s3->putObject([
             'Bucket' => $bucketName,
             'Key' => $fileKey,
-            'Body' => fopen($fileTmpName, 'rb')
+            'Body' => fopen($fileTmpName, 'rb'),
+            'ContentType' => $fileType  // Ensure correct MIME type is set
         ]);
 
         $objectUrl = $s3->getObjectUrl($bucketName, $fileKey);
