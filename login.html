@@ -7,14 +7,6 @@
     <link rel="stylesheet" href="styl.css">
 </head>
 <body>
-    <?php
-    session_start(); // Ensure session is started to read error message
-
-    if (isset($_SESSION['error'])) {
-        echo "<p style='color: red;'>" . $_SESSION['error'] . "</p>";
-        unset($_SESSION['error']); // Clear the error message
-    }
-    ?>
     <div class="container">
         <form action="login.php" method="post" class="login-form">
             <h2>Login</h2>
