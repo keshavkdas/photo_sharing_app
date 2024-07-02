@@ -51,12 +51,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: upload.html");
             exit();
         } else {
-            // Invalid password
-            echo "Invalid username or password.";
+            $_SESSION['error'] = "Invalid username or password.";
+            header("Location: login.php");
+            exit();
         }
     } else {
-        // Invalid username
-        echo "Invalid username or password.";
+         $_SESSION['error'] = "Invalid username or password.";
+        header("Location: login.php");
+        exit();
     }
 
     // Close the statement and connection
