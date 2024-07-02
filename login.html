@@ -5,14 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="styl.css">
-    <style>
-        .error {
-            color: red;
-        }
-        .error-input {
-            border: 1px solid red;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -24,20 +16,11 @@
             </div>
             <div class="input-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required <?php echo (isset($_SESSION['error']) && $_SESSION['error_type'] === 'password') ? 'class="error-input"' : ''; ?>>
+                <input type="password" id="password" name="password" required>
             </div>
             <button type="submit" class="btn">Login</button>
             <p>Don't have an account? <a href="register.html">Register here</a></p>
         </form>
     </div>
-    <script>
-        // Check if there's an error and apply error style to password field
-        document.addEventListener("DOMContentLoaded", function() {
-            var errorType = "<?php echo isset($_SESSION['error']) ? $_SESSION['error_type'] : ''; ?>";
-            if (errorType === 'password') {
-                document.getElementById("password").classList.add("error-input");
-            }
-        });
-    </script>
 </body>
 </html>
