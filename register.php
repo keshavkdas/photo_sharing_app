@@ -25,13 +25,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = htmlspecialchars($password);
 
     // Check if username already exists
-    $checkQuery = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    $checkQuery = $conn->prepare("SELECT username FROM users WHERE username = ?");
     $checkQuery->bind_param("s", $username);
     $checkQuery->execute();
     $checkResult = $checkQuery->get_result();
 
     if ($checkResult->num_rows > 0) {
+        // Username already exists
         echo "<script>alert('Username already exists.'); window.location.href='register.html';</script>";
+        exit(); // Stop further execution
     } else {
         // Insert user into 'users' table
         $insertQuery = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
@@ -46,6 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($createTableQuery->execute() === TRUE) {
                 echo "<script>alert('Registration successful.'); window.location.href='login.html';</script>";
+                exit(); // Stop further execution
             } else {
                 echo "Error creating user table: " . $conn->error;
             }
