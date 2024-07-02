@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             )");
 
             if ($createTableQuery->execute() === TRUE) {
-                echo "<script src='loginre.js'</script>";
+                echo "<script src='loginre.js'></script>";
                 exit(); // Stop further execution
             } else {
                 echo "Error creating user table: " . $conn->error;
