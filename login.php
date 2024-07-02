@@ -10,12 +10,6 @@ $dbname = "photo_sharing_app"; // Database name
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} else {
-    // Debugging
-    echo "Database connected successfully<br>";
-}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $_POST['username'];
