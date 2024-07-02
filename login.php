@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+header("Content-Security-Policy: default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;");
+
 $servername = "localhost";
 $username = "root"; // Database username
 $password = "Keshav@123"; // Database password
