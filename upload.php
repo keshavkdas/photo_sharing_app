@@ -8,7 +8,6 @@ if (!isset($_SESSION['username'])) {
 
 require '/var/www/html/vendor/autoload.php';
 
-
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 use Aws\Credentials\Credentials;
@@ -16,6 +15,7 @@ use Aws\SecretsManager\SecretsManagerClient;
 
 $bucketName = 'keshavshare';
 $region = 'ap-south-1';
+
 function getAWSCredentials()
 {
     $secretName = "s3bucket-cred"; // Replace with your secret name in AWS Secrets Manager
@@ -59,6 +59,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
     $fileName = $_FILES['file']['name'];
     $fileTmpName = $_FILES['file']['tmp_name'];
+    $fileType = mime_content_type($fileTmpName);
+
+    // Allowed file types
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
+
+    // Validate file type
+    if (!in_array($fileType, $allowedTypes)) {
+        echo "Invalid file type.";
+        exit();
+    }
+
+    // Sanitize file name
+    $fileName = preg_replace('/[^a-zA-Z0-9_\.\-]/', '_', $fileName);
 
     // Create S3 client
     $s3 = new S3Client([
@@ -69,6 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
         'version' => 'latest',
         'region' => $region,
     ]);
+
     try {
         // Create folder in S3 bucket with user's username
         $folderName = "user_$username/";
@@ -87,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
         $userTableName = "user_$username";
 
         // Insert file details into user-specific table
-        $insertQuery = "INSERT INTO $userTableName ( file_name, file_url) VALUES ( '$fileName', '$objectUrl')";
+        $insertQuery = "INSERT INTO $userTableName (file_name, file_url) VALUES ('$fileName', '$objectUrl')";
         if ($conn->query($insertQuery) === TRUE) {
             echo "File uploaded successfully.";
             header("Location: listfiles.html");
