@@ -57,7 +57,7 @@ if ($conn->connect_error) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
-    $fileName = $_FILES['file']['name'];
+    $fileName = htmlspecialchars($_FILES['file']['name']);
     $fileTmpName = $_FILES['file']['tmp_name'];
     $fileType = mime_content_type($fileTmpName);
 
@@ -70,8 +70,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['username'])) {
         exit();
     }
 
+    $fileName = htmlspecialchars($fileName);
+
     // Sanitize file name
     $fileName = preg_replace('/[^a-zA-Z0-9_\.\-]/', '_', $fileName);
+    
 
     // Create S3 client
     $s3 = new S3Client([
