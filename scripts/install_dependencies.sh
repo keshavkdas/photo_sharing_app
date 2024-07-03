@@ -1,34 +1,29 @@
 #!/bin/bash
 
 # Update the package repository
-sudo yum update -y
+sudo apt-get update
 
 # Install Apache web server
-sudo yum install -y httpd
+sudo apt-get install -y apache2
 
 # Start Apache web server
-sudo systemctl start httpd
-sudo systemctl enable httpd
+sudo systemctl start apache2
+sudo systemctl enable apache2
 
-# Install PHP
-sudo yum install -y php
+# Install PHP and Apache PHP module
+sudo apt-get install -y php libapache2-mod-php
 
 # Restart Apache to load PHP module
-sudo systemctl restart httpd
+sudo systemctl restart apache2
 
 # Navigate to the application directory
 cd /var/www/html
 
-# Install any PHP dependencies (if using Composer, uncomment the next lines)
-# curl -sS https://getcomposer.org/installer | php
-# php composer.phar install
-
 # Ensure correct permissions for the web server
-sudo chown -R apache:apache /var/www/html
+sudo chown -R www-data:www-data /var/www/html
 sudo chmod -R 755 /var/www/html
 
 # Optional: Install any additional software or dependencies your application needs
-# sudo yum install -y <additional-dependencies>
+# sudo apt-get install -y <additional-dependencies>
 
 echo "Deployment script completed successfully."
-
