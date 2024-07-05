@@ -3,6 +3,7 @@ os: linux
 files:
   - source: /
     destination: /var/www/html/photo_sharing_app
+    overwrite: true 
 hooks:
   BeforeInstall:
     - location: scripts/install_dependencies.sh
