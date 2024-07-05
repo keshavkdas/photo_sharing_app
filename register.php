@@ -24,6 +24,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = htmlspecialchars($username);
     $password = htmlspecialchars($password);
 
+    // Check password strength
+    $uppercase = preg_match('/[A-Z]/', $password);
+    $lowercase = preg_match('/[a-z]/', $password);
+    $number    = preg_match('/[0-9]/', $password);
+    $specialChars = preg_match('/[^\w]/', $password); // Matches any non-word character (special characters)
+
+    if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
+        echo "<script>alert('Password is not strong enough. It must contain at least 8 characters including uppercase, lowercase, numbers, and special characters.');</script>";
+        exit(); // Stop further execution
+    }
+
     // Check if username already exists
     $checkQuery = $conn->prepare("SELECT username FROM users WHERE username = ?");
     $checkQuery->bind_param("s", $username);
