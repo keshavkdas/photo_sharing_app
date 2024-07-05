@@ -1,15 +1,18 @@
 version: 0.0
-os: linux
+os: ubuntu
 files:
   - source: /
     destination: /var/www/html/photo_sharing_app
 hooks:
   BeforeInstall:
     - location: scripts/install_dependencies.sh
+<<<<<<< HEAD
       timeout: 300
       runas: ubuntu
   AfterInstall:
     - location: scripts/start_server.sh
       timeout: 300
+=======
+>>>>>>> ce5a25e94f94fb4767bdeccd8940613c841f5f1a
       runas: ubuntu
 
