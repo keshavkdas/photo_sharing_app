@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $specialChars = preg_match('/[^\w]/', $password); // Matches any non-word character (special characters)
 
     if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
-        echo "<script>alert('Password is not strong enough. It must contain at least 8 characters including uppercase, lowercase, numbers, and special characters.');</script>";
+        echo "<script>alert('Password is not strong enough.  It must contain at least 8 characters including uppercase, lowercase, numbers, and special characters.');</script>";
         exit(); // Stop further execution
     }
 
