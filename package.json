@@ -1,20 +1,20 @@
 {
-  "name": "photo-sharing-app",     
-  "version": "1.0.0",              
-  "description": "A photo sharing application built with Node.js",  
-  "main": "index.js",              
+  "name": "photo-app",
+  "version": "1.0.0",
+  "description": "A simple Node.js application",
+  "main": "index.js",
   "scripts": {
-    "start": "node index.js",      
-    "test": "echo \"Error: no test specified\" && exit 1"
-    "lint": "eslint ." 
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
   },
-  "author": "Keshav k das",           
-  "license": "MIT",                
-  "dependencies": {                
-    "express": "^4.17.1",        
-    "mongoose": "^6.0.7"           
+  "author": "Keshav",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^6.0.7"
   },
-  "devDependencies": {            
-    "nodemon": "^2.0.15"           
+  "devDependencies": {
+    "eslint": "^8.0.0"
   }
 }
