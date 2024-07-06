@@ -1,19 +1,19 @@
 {
-  "name": "photo-sharing-app",     // Name of your project
-  "version": "1.0.0",              // Version of your project
-  "description": "A photo sharing application built with Node.js",  // Description of your project
-  "main": "index.js",              // Entry point of your application
+  "name": "photo-sharing-app",     
+  "version": "1.0.0",              
+  "description": "A photo sharing application built with Node.js",  
+  "main": "index.js",              
   "scripts": {
-    "start": "node index.js",      // Script to start your application
+    "start": "node index.js",      
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Keshav k das",           // Author of the project
-  "license": "MIT",                // License under which the project is distributed
-  "dependencies": {                // List of dependencies required by your project
-    "express": "^4.17.1",          // Example dependency: Express framework
-    "mongoose": "^6.0.7"           // Example dependency: Mongoose ODM for MongoDB
+  "author": "Keshav k das",           
+  "license": "MIT",                
+  "dependencies": {                
+    "express": "^4.17.1",        
+    "mongoose": "^6.0.7"           
   },
-  "devDependencies": {             // Optional: List of dependencies needed only for development
-    "nodemon": "^2.0.15"           // Example dev dependency: Nodemon for automatic server restart
+  "devDependencies": {            
+    "nodemon": "^2.0.15"           
   }
 }
