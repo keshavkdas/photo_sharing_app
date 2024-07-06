@@ -36,14 +36,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: upload.html");
             exit();
         } else {
-            $_SESSION['error'] = "Invalid username or password.";
-            $_SESSION['error_type'] = "password";
+            $error = "Incorrect password.";
             header("Location: login.html");
             exit();
         }
     } else {
-        $_SESSION['error'] = "Invalid username or password.";
-        $_SESSION['error_type'] = "username";
+        $error = "Username does not exist.";
         header("Location: login.html");
         exit();
     }
