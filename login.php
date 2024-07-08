@@ -39,8 +39,8 @@ function getSecret($secretName) {
 
 // Retrieve reCAPTCHA keys from AWS Secrets Manager
 $secret = getSecret('captcha'); 
-$siteKey = $secret['site_key'];
-$secretKey = $secret['secret_key'];
+$siteKey = $secret['recaptcha_site_key'];
+$secretKey = $secret['recaptcha_secret_key'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $_POST['username'];
