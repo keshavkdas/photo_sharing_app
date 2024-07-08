@@ -12,14 +12,14 @@
         <form action="login.php" method="post" class="login-form">
             <h2>Login</h2>
             <div class="input-group">
-                <label for="username">Username<?php echo global $siteKey; ?></label>
+                <label for="username">Username</label>
                 <input type="text" id="username" name="username" required>
             </div>
             <div class="input-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            <div class="g-recaptcha" data-sitekey="<?php echo $siteKey; ?>"></div>
+            <div class="g-recaptcha" data-sitekey="<?php echo global $siteKey; ?>"></div>
             <button type="submit" class="btn">Login</button>
             <p>Don't have an account? <a href="register.html">Register here</a></p>
         </form>
