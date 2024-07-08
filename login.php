@@ -18,6 +18,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = htmlspecialchars($user);
     $pass = htmlspecialchars($pass);
 
+    // Verify reCAPTCHA
+    $secretKey = "your_secret_key";
+    $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secretKey&response=$recaptchaResponse");
+    $responseKeys = json_decode($response, true);
+
+    if (intval($responseKeys["success"]) !== 1) {
+        $error = "Please complete the CAPTCHA.";
+        header("Location: login.html");
+        exit();
+    }
+
     // Prepare and bind
     $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE username = ?");
     $stmt->bind_param("s", $user);
