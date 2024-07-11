@@ -26,7 +26,7 @@ RUN apt-get update \
 WORKDIR /var/www/html
 
 # Copy your application code to the container's filesystem
-COPY /var/www/html/photo_sharing_app/ /var/www/html/
+COPY src/ /var/www/html/
 
 # Expose port 80 to allow outside access to your container
 EXPOSE 80
