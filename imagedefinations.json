@@ -2,11 +2,9 @@
   {
     "name": "photo-share",
     "imageUri": "381492187334.dkr.ecr.ap-south-1.amazonaws.com/photo-share:latest"
-  }
-  
+  },
   {
     "name": "photo-share-database",
     "imageUri": "381492187334.dkr.ecr.ap-south-1.amazonaws.com/photo-share-database:latest"
   }
-
 ]
