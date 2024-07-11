@@ -1,6 +1,6 @@
 [
   {
-    "name": "photo-share-container",
-    "imageUri": "381492187334.dkr.ecr.ap-south-1.amazonaws.com/photo-share-container:latest"
+    "name": "photo-share",
+    "imageUri": "381492187334.dkr.ecr.ap-south-1.amazonaws.com/photo-share:latest"
   }
 ]
