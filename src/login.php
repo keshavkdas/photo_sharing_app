@@ -3,7 +3,7 @@ session_start();
 
 //header("Content-Security-Policy: default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;");
 
-$servername = "localhost";
+$servername = "172.31.41.155";
 $username = "root"; // Database username
 $password = "Keshav@123"; // Database password
 $dbname = "photo_sharing_app"; // Database name
