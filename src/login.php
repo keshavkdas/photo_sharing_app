@@ -3,12 +3,13 @@ session_start();
 
 //header("Content-Security-Policy: default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;");
 
-$servername = "ip-172-31-41-155.ap-south-1.compute.internal";
+$servername = "database-1.c9msci66qwge.ap-south-1.rds.amazonaws.com";
+$port = 3306;
 $username = "root"; // Database username
-$password = "Keshav@123"; // Database password
+$password = "Keshav#123"; // Database password
 $dbname = "photo_sharing_app"; // Database name
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname, $port);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $_POST['username'];
