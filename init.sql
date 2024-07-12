@@ -12,5 +12,5 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- Insert some initial data
-INSERT INTO users (username, email) VALUES
+INSERT INTO users (username, password) VALUES
 ('keshav', '1234');
