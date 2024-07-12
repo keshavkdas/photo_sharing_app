@@ -7,7 +7,7 @@ $servername = "database-1.c9msci66qwge.ap-south-1.rds.amazonaws.com";
 $port = 3306;
 $username = "root"; // Database username
 $password = "Keshav#123"; // Database password
-$dbname = "photo_sharing_app"; // Database name
+$dbname = "database-1"; // Database name
 
 $conn = new mysqli($servername, $username, $password, $dbname, $port);
 
